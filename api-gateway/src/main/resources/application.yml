@@ -20,11 +20,19 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/users/**
+          filters:
+            - AuthenticationFilter
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+              - Path=/auth/**
 
         - id: expense-service
           uri: lb://expense-service
           predicates:
             - Path=/expenses/**
+          filters:
+            - AuthenticationFilter
 
   security:
     oauth2:
@@ -34,7 +42,9 @@ spring:
 
 eureka:
   client:
-    serviceUrl:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
