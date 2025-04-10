@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:14
+    container_name: exp_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: expanse_tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: anuj123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  service-registry:
+    build: ./service-registry
+    container_name: service-registry
+    ports:
+      - "8761:8761"
+    depends_on:
+      - postgres
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-registry
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - backend
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    depends_on:
+      - postgres
+      - service-registry
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - backend
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    depends_on:
+      - postgres
+      - service-registry
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - backend
+
+  expense-service:
+    build: ./expense-service
+    container_name: expense-service
+    depends_on:
+      - postgres
+      - service-registry
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
+    driver: bridge

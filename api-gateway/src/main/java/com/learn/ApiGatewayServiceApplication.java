@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.learn")
 public class ApiGatewayServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayServiceApplication.class, args);

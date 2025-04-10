@@ -1,5 +1,6 @@
 server:
   port: 0
+
 jwt:
   secret: secret123
 
@@ -23,7 +24,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://service-registry:8761/eureka/
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.int}
@@ -31,6 +32,7 @@ eureka:
     lease-expiration-duration-in-seconds: 30
     metadata-map:
       instanceId: ${spring.application.name}:${random.int}
+
 management:
   endpoints:
     web:
@@ -39,5 +41,4 @@ management:
   endpoint:
     health:
       show-details: always
-
 

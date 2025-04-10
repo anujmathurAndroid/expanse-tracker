@@ -2,13 +2,15 @@ package com.learn.auth.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String secret = "secret123";
+    @Value("${jwt.secret}")
+    private String secret;
 
     public String generateToken(String username) {
         return Jwts.builder()
@@ -22,4 +24,5 @@ public class JwtUtil {
     public String validateTokenAndRetrieveSubject(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
+
 }
